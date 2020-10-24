@@ -1,10 +1,16 @@
 # Модуль, отвечающий за вывод "поля боя".
+
 import os, time, keyboard, threading
+
+A = []
+protagonist_y = 13
+protagonist_x = 9
+score = 0
 
 
 # Основной декоратор для функций.
 def sheet(function):
-    global protagonist_y, protagonist_x, score
+    global protagonist_y, protagonist_x, score, A
     os.system('cls')
     for i in range(0, 15):
         if i == 9:
@@ -16,9 +22,9 @@ def sheet(function):
         A[i][0] = "\ "
         A[i][19] = " /"
 
-    function()
+    func = function
 
-    A[protagonist_y][protagonist_x]= ' ^ '
+    A[protagonist_y][protagonist_x] = ' ^ '
     A[0][0] = 'Score: ' + str(score)
     for i in range(15):
         print()
@@ -29,7 +35,7 @@ def sheet(function):
 
 # Функция для первого вывода "поля боя".
 def first_sheet():
-    global protagonist_y, protagonist_x, score
+    global protagonist_y, protagonist_x, score, A
     os.system('cls')
     for i in range(0, 15):
         if i == 9:
@@ -49,3 +55,4 @@ def first_sheet():
         for j in range(20):
             print(A[i][j], end="")
     print()
+

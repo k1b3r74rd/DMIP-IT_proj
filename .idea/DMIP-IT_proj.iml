@@ -7,6 +7,8 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="crm_kvant" />
+    <orderEntry type="module" module-name="07" />
+    <orderEntry type="module" module-name="RA_Python-master" />
   </component>
   <component name="TestRunnerService">
     <option name="PROJECT_TEST_RUNNER" value="Unittests" />
