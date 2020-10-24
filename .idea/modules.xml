@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/DMIP-IT_proj.iml" filepath="$PROJECT_DIR$/.idea/DMIP-IT_proj.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../crm_kvant/.idea/crm_kvant.iml" filepath="$PROJECT_DIR$/../crm_kvant/.idea/crm_kvant.iml" />
     </modules>
   </component>
 </project>

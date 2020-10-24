@@ -1,4 +1,6 @@
-import keyboard, os, time
+import keyboard, os, time, threading
+from SI_Project.sheet import sheet, first_sheet
+import SI_Project.action
 
 A = []
 
@@ -7,10 +9,10 @@ protagonist_y = 13
 protagonist_x = 9
 score = 0
 
-# Тестовые переменные под снаряд
-projectile_y = 12
-projectile_x = 9
-projectile_type = " | "
+# # Тестовые переменные под снаряд
+# projectile_y = 12
+# projectile_x = 9
+# projectile_type = " | "
 
 
 # Стартовое окно
