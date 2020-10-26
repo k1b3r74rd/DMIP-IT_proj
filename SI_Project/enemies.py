@@ -1,11 +1,19 @@
-# Модуль, отвечающий за вывод "поля боя".
+# Модуль, отвечащий за "спавн" и движение противников.
 
-import os, time, keyboard, threading
+import keyboard, os, time, threading
+# from SI_Project.sheet import sheet, first_sheet
+# import SI_Project.action
 
 A = []
+enemy_y = 1
+enemy_x = 1
+
 protagonist_y = 13
 protagonist_x = 9
 score = 0
+
+game = True
+end = True
 
 
 # Основной декоратор для функций.
@@ -55,3 +63,35 @@ def first_sheet():
         for j in range(20):
             print(A[i][j], end="")
     print()
+
+
+def spawn():
+    global enemy_x, enemy_y
+    time.sleep(0.001)
+    A[enemy_y][enemy_x] = ')-('
+    if enemy_x != 19:
+        enemy_x += 1
+    else:
+        enemy_x -= 18
+        enemy_y += 1
+
+    if enemy_y == 9:
+        print('game_over')
+        enemy_anima.join()
+
+
+def enemy():
+    global enemy_anima
+    enemy_anima = threading.Thread(target=spawn())
+    enemy_anima.start()
+
+
+# if __name__ == "__main__":
+#     first_sheet()
+#     while game:
+#         sheet(enemy())
+#
+#     while end:
+#         os.system('cls')
+#         print('YOU LOSE')
+#         time.sleep(10000)

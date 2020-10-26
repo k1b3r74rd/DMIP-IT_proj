@@ -1,3 +1,5 @@
+# Первый файл для тестов и испытаний ( функции и механики, относящиеся к проекту).
+
 import keyboard, os, time, threading
 # from SI_Project.sheet import sheet, first_sheet
 # import SI_Project.action
@@ -107,22 +109,17 @@ def projectile():
     projectile_y = protagonist_y
     projectile_x = protagonist_x
 
-    def kill(y, x):
-        global score
-        A[y][x] = " * "
-        score += 100
-        time.sleep(0.5)
-        return ' * '
-
     def anima():
-        global projectile_y, projectile_x
+        global projectile_y, projectile_x, score
+        j = False
+
         if A[projectile_y][projectile_x] == " | ":
             A[projectile_y][projectile_x] = "   "
         elif A[projectile_y][projectile_x] == "_|_":
             A[projectile_y][projectile_x] = "_ _"
         elif A[projectile_y][projectile_x] == " * " or A[projectile_y-1][projectile_x] == " * ":
-            A[projectile_y][projectile_x] = "   "
-            A[projectile_y-1][projectile_x] = "   "
+            A[projectile_y][projectile_x] = '   '
+            j = True
 
         if A[projectile_y - 1][projectile_x] == "   ":
             projectile_y -= 1
@@ -131,14 +128,19 @@ def projectile():
         elif A[projectile_y - 1][projectile_x] == "_ _":
             projectile_y -= 1
             A[projectile_y][projectile_x] = "_|_"
-
         else:
             projectile_y -= 1
-            A[projectile_y][projectile_x] = kill(projectile_y, projectile_x)
+            A[projectile_y][projectile_x] = " * "
+            score += 100
+            time.sleep(0.1)
 
-        time.sleep(0.05)
+        if projectile_y == 0 or j:
+            A[projectile_y][projectile_x] = '   '
+            j = False
 
-    for i in range(1, 12):
+        time.sleep(0.001)
+
+    for i in range(13):
         sheet(anima())
 
 
@@ -146,11 +148,11 @@ def shot():
     global animation
     animation = threading.Thread(target=projectile)
     animation.start()
+    # animation.join()
 
 
 if __name__ == "__main__":
     greetings()
-    first_sheet()
     while True:
         keyboard.hook(action)
         keyboard.wait()
