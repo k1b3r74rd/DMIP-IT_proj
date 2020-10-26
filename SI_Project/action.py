@@ -26,7 +26,7 @@ def action(button):
             sheet(move_right())
 
     elif button.name == "space" and button.event_type == "down":
-        action.shot()
+        sheet()
 
 
 def move_left():
@@ -43,8 +43,7 @@ def move_right():
     A[protagonist_y][protagonist_x] = ' ^ '
 
 
-def shot():
-
+def projectile():
     def kill(y, x):
         global score
         A[y][x] = " * "
@@ -55,24 +54,32 @@ def shot():
     global score
     projectile_y = protagonist_y
     projectile_x = protagonist_x
-    if A[projectile_y][projectile_x] == " | ":
-        A[projectile_y][projectile_x] = "   "
-    elif A[projectile_y][projectile_x] == "_|_":
-        A[projectile_y][projectile_x] = "_ _"
+    for i in range(1, 13):
+        if A[projectile_y][projectile_x] == " | ":
+            A[projectile_y][projectile_x] = "   "
+        elif A[projectile_y][projectile_x] == "_|_":
+            A[projectile_y][projectile_x] = "_ _"
+        elif A[projectile_y][projectile_x] == " * ":
+            A[projectile_y][projectile_x] = "   "
+            animation.join()
+            break
 
-    if A[projectile_y - 1][projectile_x] == "   ":
-        projectile_y -= 1
-        projectile_type = " | "
+        if A[projectile_y - 1][projectile_x] == "   ":
+            projectile_y -= 1
+            A[projectile_y][projectile_x] = " | "
 
-    elif A[projectile_y - 1][projectile_x] == "_ _":
-        projectile_y -= 1
-        projectile_type = "_|_"
+        elif A[projectile_y - 1][projectile_x] == "_ _":
+            projectile_y -= 1
+            A[projectile_y][projectile_x] = "_|_"
 
-    else:
-        projectile_y -= 1
-        projectile_type = kill(projectile_y, projectile_x)
+        else:
+            projectile_y -= 1
+            A[projectile_y][projectile_x] = kill(projectile_y, projectile_x)
 
-    time.sleep(0.05)
+        time.sleep(0.05)
 
 
-threading.Thread(target=sheet, args=[y, x, projectile_type]).start()
+def shot():
+    global animation
+    animation = threading.Thread(target=projectile)
+    animation.start()

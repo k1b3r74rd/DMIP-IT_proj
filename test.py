@@ -33,7 +33,7 @@ def sheet(function):
         A[i][0] = "\ "
         A[i][19] = " /"
 
-    function()
+    func = function
 
     A[protagonist_y][protagonist_x] = ' ^ '
     A[0][0] = 'Score: ' + str(score)
@@ -75,30 +75,77 @@ def action(button):
         if protagonist_x - 1 == 0:
             pass
         else:
-            move_left(protagonist_y, protagonist_x)
+            sheet(move_left())
 
     elif button.name == "right" and button.event_type == "down":
         if protagonist_x + 1 == 19:
             pass
         else:
-            move_right(protagonist_y, protagonist_x)
+            sheet(move_right())
 
     elif button.name == "space" and button.event_type == "down":
-        action.shot()
+        shot()
 
 
-@sheet
-def move_left(protagonist_y, protagonist_x):
+def move_left():
+    global protagonist_y, protagonist_x
     A[protagonist_y][protagonist_x] = "   "
     protagonist_x -= 1
     A[protagonist_y][protagonist_x] = ' ^ '
 
 
-@sheet
-def move_right(protagonist_y, protagonist_x):
+def move_right():
+    global protagonist_y, protagonist_x
     A[protagonist_y][protagonist_x] = "   "
     protagonist_x += 1
     A[protagonist_y][protagonist_x] = ' ^ '
+
+
+def projectile():
+    global score
+    global projectile_y, projectile_x, protagonist_y, protagonist_x
+    projectile_y = protagonist_y
+    projectile_x = protagonist_x
+
+    def kill(y, x):
+        global score
+        A[y][x] = " * "
+        score += 100
+        time.sleep(0.5)
+        return ' * '
+
+    def anima():
+        global projectile_y, projectile_x
+        if A[projectile_y][projectile_x] == " | ":
+            A[projectile_y][projectile_x] = "   "
+        elif A[projectile_y][projectile_x] == "_|_":
+            A[projectile_y][projectile_x] = "_ _"
+        elif A[projectile_y][projectile_x] == " * " or A[projectile_y-1][projectile_x] == " * ":
+            A[projectile_y][projectile_x] = "   "
+            A[projectile_y-1][projectile_x] = "   "
+
+        if A[projectile_y - 1][projectile_x] == "   ":
+            projectile_y -= 1
+            A[projectile_y][projectile_x] = " | "
+
+        elif A[projectile_y - 1][projectile_x] == "_ _":
+            projectile_y -= 1
+            A[projectile_y][projectile_x] = "_|_"
+
+        else:
+            projectile_y -= 1
+            A[projectile_y][projectile_x] = kill(projectile_y, projectile_x)
+
+        time.sleep(0.05)
+
+    for i in range(1, 12):
+        sheet(anima())
+
+
+def shot():
+    global animation
+    animation = threading.Thread(target=projectile)
+    animation.start()
 
 
 if __name__ == "__main__":

@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="de02cf3d-8a4b-4026-8544-aa370f61b78f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/DMIP-IT_proj.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/DMIP-IT_proj.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SI_Project/action.py" beforeDir="false" afterPath="$PROJECT_DIR$/SI_Project/action.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SI_Project/sheet.py" beforeDir="false" afterPath="$PROJECT_DIR$/SI_Project/sheet.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/testtest.py" beforeDir="false" afterPath="$PROJECT_DIR$/testtest.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../crm_kvant/ExcelDogovor/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../crm_kvant/ExcelDogovor/main.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -47,7 +43,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.testtest">
+  <component name="RunManager" selected="Python.test">
     <configuration name="action" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="DMIP-IT_proj" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -155,10 +151,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.test" />
         <item itemvalue="Python.testtest" />
         <item itemvalue="Python.action" />
         <item itemvalue="Python.sheet" />
-        <item itemvalue="Python.test" />
         <item itemvalue="Python.main" />
       </list>
     </recent_temporary>
