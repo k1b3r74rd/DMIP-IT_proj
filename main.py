@@ -5,6 +5,7 @@ import keyboard, os, time, threading
 # import SI_Project.action
 
 A = []
+act = True
 
 protagonist_y = 13
 protagonist_x = 9
@@ -106,13 +107,13 @@ def move_right():
 
 # Функции, отвечающие за движение и поведение выстрела.
 def projectile():
-    global score
+    global score, act
     global projectile_y, projectile_x, protagonist_y, protagonist_x
     projectile_y = protagonist_y
     projectile_x = protagonist_x
 
     def anima():
-        global projectile_y, projectile_x, score
+        global projectile_y, projectile_x, score, act
         j = False
 
         if A[projectile_y][projectile_x] == " | ":
@@ -139,18 +140,20 @@ def projectile():
         if projectile_y == 0 or j:
             A[projectile_y][projectile_x] = '   '
             j = False
+            act = False
 
         time.sleep(0.001)
 
-    for i in range(13):
+    while act:
         sheet(anima())
 
 
 def shot():
-    global animation
+    global animation, act
     animation = threading.Thread(target=projectile)
     animation.start()
-    # animation.join()
+    animation.join()
+    act = True
 
 
 if __name__ == "__main__":

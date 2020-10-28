@@ -5,15 +5,13 @@ import keyboard, os, time, threading
 # import SI_Project.action
 
 A = []
-enemy_y = 1
-enemy_x = 1
+B = []
 
 protagonist_y = 13
 protagonist_x = 9
 score = 0
 
 game = True
-end = True
 
 
 # Основной декоратор для функций.
@@ -65,33 +63,75 @@ def first_sheet():
     print()
 
 
-def spawn():
-    global enemy_x, enemy_y
-    time.sleep(0.001)
-    A[enemy_y][enemy_x] = ')-('
-    if enemy_x != 19:
-        enemy_x += 1
-    else:
-        enemy_x -= 18
-        enemy_y += 1
+def enemy_generate():
+    global B
+    for y in range(4):
+        B.append([r'\|/'] * 20)
+        for x in range(20):
+            if y % 2 != 0:
+                if x % 2 != 0:
+                    B[y][x] = '   '
 
-    if enemy_y == 9:
-        print('game_over')
-        enemy_anima.join()
+            elif y % 2 != 1:
+                if x % 2 != 1:
+                    B[y][x] = '   '
+
+
+def spawn():
+    global A, B, enemy_y, game, end
+
+    def enemy_first_spawn(enemy_y):
+        for x in range(1, 20):
+            A[enemy_y][x] = B[enemy_y][x]
+
+    def enemy_move(enemy_y):
+        for x in range(1, 20):
+            A[enemy_y][x] = A[enemy_y - 1][x]
+            A[enemy_y - 1][x] = A[enemy_y - 2][x]
+            A[enemy_y - 2][x] = A[enemy_y - 3][x]
+            A[enemy_y - 3][x] = '   '
+
+    while game:
+        for enemy_y in range(1, 10):
+            if enemy_y < 4:
+                sheet(enemy_first_spawn(enemy_y))
+                time.sleep(0.3)
+            else:
+                time.sleep(0.5)
+                sheet(enemy_move(enemy_y))
+
+        for i in range(20):
+            if A[9][i] != '_ _':
+                print('GAME OVER, YOU LOSE // GAME OVER, YOU LOSE // GAME OVER')
+                time.sleep(2)
+                game = False
+                break
+
+            elif A[9][i] == '_ _':
+                print('YOU WIN // YOU WIN // YOU WIN // YOU WIN // YOU WIN // ')
+                time.sleep(2)
+                game = False
+                break
 
 
 def enemy():
     global enemy_anima
-    enemy_anima = threading.Thread(target=spawn())
+
+    enemy_anima = threading.Thread(target=spawn)
     enemy_anima.start()
+    enemy_anima.join()
 
 
-# if __name__ == "__main__":
-#     first_sheet()
-#     while game:
-#         sheet(enemy())
-#
-#     while end:
-#         os.system('cls')
-#         print('YOU LOSE')
-#         time.sleep(10000)
+def end():
+        os.system('cls')
+        print('SCORE // SCORE // SCORE // SCORE // SCORE // SCORE // ')
+        time.sleep(30)
+
+
+if __name__ == "__main__":
+    enemy_generate()
+    first_sheet()
+
+    enemy()
+
+    end()
