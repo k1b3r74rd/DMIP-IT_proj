@@ -1,25 +1,40 @@
 # Основной файл, из которого будет запускаться игра.
 
-import keyboard, os, time, threading, multiprocessing
-# from SI_Project.sheet import sheet, first_sheet
-# import SI_Project.action
+import keyboard, os, time, threading
 
 A = []
+B = []
 act = True
+game = True
+ending = False
 
 protagonist_y = 13
 protagonist_x = 9
 score = 0
 
 
-def greetings():
+# Стартовое окно.
+def start_window():
+    global potok, enemy_anima, ending
+
     def start(enter):
-        if enter.name == "enter":
+        global potok, enemy_anima, ending
+        enemy_generate()
+        if enter.name == "enter" and enter.event_type == "down":
+            keyboard.block_key("enter")
             first_sheet()
+            potok.start()
+            enemy_anima.start()
+
+        if ending:
+            end()
 
     os.system('cls')
-    print('Welcome to da game. Press "Enter" to start da game.')
+    print('Made by Zolotarev Maxim. Tomsk. 2020. ', end='\n\n\n\n\n')
+    print('Welcome to "Space Invaders" clone game. Press "Enter" to start.', end='\n\n\n\n\n')
+    print('Controls:\n Space - shoot \n right arrow - move right \n left arrow - move left')
     keyboard.hook(start)
+    keyboard.wait()
 
 
 # Основной декоратор для функций.
@@ -79,16 +94,22 @@ def action(button):
         if protagonist_x - 1 == 0:
             pass
         else:
-            sheet(move_left())
+            a = threading.Thread(sheet(move_left()))
+            a.start()
+            a.join()
 
     elif button.name == "right" and button.event_type == "down":
         if protagonist_x + 1 == 19:
             pass
         else:
-            sheet(move_right())
+            a = threading.Thread(sheet(move_right()))
+            a.start()
+            a.join()
 
     elif button.name == "space" and button.event_type == "down":
-        shot()
+        a = threading.Thread(shot())
+        a.start()
+        a.join()
 
 
 def move_left():
@@ -120,7 +141,7 @@ def projectile():
             A[projectile_y][projectile_x] = "   "
         elif A[projectile_y][projectile_x] == "_|_":
             A[projectile_y][projectile_x] = "_ _"
-        elif A[projectile_y][projectile_x] == " * " or A[projectile_y-1][projectile_x] == " * ":
+        elif A[projectile_y][projectile_x] == " * ":
             A[projectile_y][projectile_x] = '   '
             j = True
 
@@ -156,8 +177,104 @@ def shot():
     act = True
 
 
-if __name__ == "__main__":
-    greetings()
+# Функция, отвечающая за создание противников.
+def enemy_generate():
+    global B
+    for y in range(4):
+        B.append([r'\|/'] * 20)
+        for x in range(20):
+            if y % 2 != 0:
+                if x % 2 != 0:
+                    B[y][x] = '   '
+
+            elif y % 2 != 1:
+                if x % 2 != 1:
+                    B[y][x] = '   '
+
+
+# Функции, отвечающие за "спавн" и движение противников, строка за строкой. Также отвечают за конец игры.
+def spawn():
+    global A, B, enemy_y, game, end, potok, enemy_anima, ending
+
+    def enemy_first_spawn(enemy_y):
+        for x in range(1, 19):
+            print(A[enemy_y][x], ' ', B[enemy_y][x])
+            A[enemy_y][x] = B[enemy_y - 1][x]
+            print(A[enemy_y][x], ' ', B[enemy_y][x])
+
+    def enemy_move(enemy_y):
+        global game, potok, enemy_anima, ending
+        for x in range(1, 20):
+            if A[enemy_y][x] == '_ _' and A[enemy_y - 1][x] == '   ':
+                pass
+            elif A[enemy_y][x] == '_ _':
+                A[enemy_y][x] = A[enemy_y - 1][x]
+                print('GAME OVER // PRESS SPACE // GAME OVER // PRESS SPACE // GAME OVER // PRESS SPACE')
+                game = False
+                ending = True
+                time.sleep(0.5)
+                break
+            else:
+                A[enemy_y][x] = A[enemy_y - 1][x]
+
+            if A[enemy_y - 1][x] == '_ _' and A[enemy_y - 2][x] == '   ':
+                pass
+            elif A[enemy_y - 1][x] == '_ _':
+                A[enemy_y - 1][x] = A[enemy_y - 2][x]
+                print('GAME OVER // PRESS SPACE // GAME OVER // PRESS SPACE // GAME OVER // PRESS SPACE')
+                game = False
+                ending = True
+                time.sleep(0.5)
+                break
+            else:
+                A[enemy_y - 1][x] = A[enemy_y - 2][x]
+
+            if A[enemy_y - 2][x] == '_ _' and A[enemy_y - 3][x] == '   ':
+                pass
+            elif A[enemy_y - 2][x] == '_ _':
+                A[enemy_y - 2][x] = A[enemy_y - 3][x]
+                print('GAME OVER // PRESS SPACE // GAME OVER // PRESS SPACE // GAME OVER // PRESS SPACE')
+                game = False
+                ending = True
+                time.sleep(0.5)
+                break
+            else:
+                A[enemy_y - 2][x] = A[enemy_y - 3][x]
+
+            A[enemy_y - 3][x] = '   '
+
+    while game:
+        for enemy_y in range(1, 12):
+            if enemy_y < 4:
+                sheet(enemy_first_spawn(enemy_y))
+                time.sleep(0.3)
+            else:
+                time.sleep(4)
+                sheet(enemy_move(enemy_y))
+                if ending:
+                    print('GAME OVER // PRESS SPACE // GAME OVER // PRESS SPACE // GAME OVER // PRESS SPACE')
+                    potok.join()
+                    enemy_anima.join()
+                    break
+
+
+# Финальный экран со счетом.
+def end():
+    global score
+    os.system('cls')
+    print('SCORE // SCORE // SCORE // SCORE // SCORE // SCORE // \n\n')
+    print('Your score:  ', score, '\n\n\n')
+    print('Sorry, no ladder for now %)')
+    time.sleep(10)
+
+
+def keyb_act():
     while True:
         keyboard.hook(action)
         keyboard.wait()
+
+
+if __name__ == "__main__":
+    enemy_anima = threading.Thread(target=spawn)
+    potok = threading.Thread(target=keyb_act)
+    start_window()
