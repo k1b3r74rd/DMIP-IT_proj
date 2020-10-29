@@ -1,6 +1,6 @@
 # Основной файл, из которого будет запускаться игра.
 
-import keyboard, os, time, threading
+import keyboard, os, time, threading, multiprocessing
 # from SI_Project.sheet import sheet, first_sheet
 # import SI_Project.action
 
